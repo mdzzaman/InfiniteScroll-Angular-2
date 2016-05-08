@@ -1,55 +1,81 @@
-﻿var gulp = require('gulp');
-var rimraf = require('rimraf');
-var uglify = require('gulp-uglify');
-var cleanCSS = require('gulp-clean-css');
-var htmlmin = require('gulp-htmlmin');
+var gulp = require('gulp');
 var del = require('gulp-delete-file');
+var fs = require('fs');
 //libs, css, html, tscopy, deleteFile
 var paths = {
     npm: './node_modules/',
     lib: './dist/lib/',
-    app: './dist/app/',
+    modules: './dist/lib/',
+    app: './dist/apps/',
+    angularCore: './dist/lib/@angular/',
     root: './dist/',
-    tsscript: './dist/scripts/',
+    tsscript: './dist/src/',
     script: './src/'
 };
 
 var libs = [
-    paths.npm + 'angular2/bundles/angular2.dev.js',
     paths.npm + 'es6-shim/es6-shim.min.js',
     paths.npm + 'es6-shim/es6-shim.min.map',
-    paths.npm + 'systemjs/dist/system-polyfills.js',
-    paths.npm + 'angular2/es6/dev/src/testing/shims_for_IE.js',
-    paths.npm + 'angular2/bundles/angular2-polyfills.js',
-    paths.npm + 'angular2/bundles/router.dev.js',
-    paths.npm + 'systemjs/dist/system.src.js',
-    paths.npm + 'rxjs/bundles/Rx.js'
+    paths.npm + 'zone.js/dist/zone.js',
+    paths.npm + 'reflect-metadata/Reflect.js',
+    paths.npm + 'systemjs/dist/system.src.js'
 ];
 
-gulp.task('html', function () {
-    return gulp.src(paths.script + '**/*.html')
-        .pipe(gulp.dest(paths.app));
+gulp.task('angularCore', function () {
+  if( fs.existsSync(paths.modules+'@angular')) {
+      console.log('file exixt');
+      return true;
+  } else {
+        gulp.src('./node_modules/@angular/**/*.*').pipe(gulp.dest(paths.modules+'@angular'));
+        gulp.src('./node_modules/rxjs/**/*.*').pipe(gulp.dest(paths.modules+'rxjs'));
+        gulp.src('./node_modules/angular2-in-memory-web-api/**/*.*').pipe(gulp.dest(paths.modules+'angular2-in-memory-web-api'));
+  }
 });
 
-gulp.task('indexCopy', function () {
+gulp.task('favicon', function () {
+    if( fs.existsSync(paths.lib)) {
+      console.log('file exixt');
+      return true;
+  } else {
+        return gulp.src(paths.script + 'favicon.ico').pipe(gulp.dest(paths.root));
+  }
+});
+
+gulp.task('html', function () {
+    return gulp.src(paths.script + 'apps/**/*.html')
+        .pipe(gulp.dest(paths.app));
+});
+gulp.task('index', function () {
     return gulp.src(paths.script + 'index.html')
         .pipe(gulp.dest(paths.root));
 });
-
-gulp.task('indexDelete', function () {
-   return gulp.src([paths.app + 'index.html']).pipe(del({
-        deleteMatch: true
-    }))
+gulp.task('system', function () {
+    return gulp.src(paths.script + 'systemjs.config.js')
+        .pipe(gulp.dest(paths.root));
 });
+// gulp.task('indexCopy', function () {
+//     return gulp.src(paths.script + 'index.html')
+//         .pipe(gulp.dest(paths.root));
+// });
+
+// gulp.task('indexDelete', function () {
+//    return gulp.src([paths.app + 'index.html']).pipe(del({
+//         deleteMatch: true
+//     }))
+// });
 
 gulp.task('css', function () {
-    return gulp.src(paths.script + '**/*.css')
+    return gulp.src(paths.script + 'apps/**/*.css')
         .pipe(gulp.dest(paths.app));
 });
 
 gulp.task('libs', function () {
-    return gulp.src(libs)
-        .pipe(gulp.dest(paths.lib));
+    if( fs.existsSync(paths.lib)) {
+      console.log('file exixt');
+      return true;
+  } else {
+        return gulp.src(libs).pipe(gulp.dest(paths.lib));
+  }
 });
 
 gulp.task('tscopy', function () {
@@ -58,4 +84,5 @@ gulp.task('tscopy', function () {
 });
 
 
-gulp.task('default', ['html','indexCopy','indexDelete', 'css','libs','tscopy']);
+gulp.task('default', ['angularCore','favicon','html','index','system', 'css','libs','tscopy']);
+//gulp.task('default', ['favicon','html','index','system', 'css','tscopy']);
