@@ -1,5 +1,5 @@
 <h3>{{ heading }}</h3>
-<div class="grid grid-pad">
+<div class="grid grid-pad" [scroll]="scrollOption">
     <div *ngFor="#student of students" class="col-1-4">
         <div class="module hero">
             <h4>{{student.name}}</h4>

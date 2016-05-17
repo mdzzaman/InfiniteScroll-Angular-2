@@ -10,6 +10,7 @@
     'init': './apps/init', // 'dist',
     'model': './apps/model',
     'student': './apps/student',
+    'scroll': './apps/scroll',
     'rxjs': './lib/rxjs',
     'angular2-in-memory-web-api': './lib/angular2-in-memory-web-api',
     '@angular': './lib/@angular'
@@ -17,9 +18,10 @@
 
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
-     'init': { main: 'main.js', defaultExtension: 'js' },
+    'init': { main: 'main.js', defaultExtension: 'js' },
     'model': { defaultExtension: 'js' },
     'student': { defaultExtension: 'js' },
+    'scroll': { defaultExtension: 'js' },
     'rxjs': { defaultExtension: 'js' },
     'angular2-in-memory-web-api': { defaultExtension: 'js' },
   };

@@ -22,23 +22,29 @@ var libs = [
 ];
 
 gulp.task('angularCore', function () {
-  if( fs.existsSync(paths.modules+'@angular')) {
-      console.log('file exixt');
-      return true;
-  } else {
-        gulp.src('./node_modules/@angular/**/*.*').pipe(gulp.dest(paths.modules+'@angular'));
-        gulp.src('./node_modules/rxjs/**/*.*').pipe(gulp.dest(paths.modules+'rxjs'));
-        gulp.src('./node_modules/angular2-in-memory-web-api/**/*.*').pipe(gulp.dest(paths.modules+'angular2-in-memory-web-api'));
-  }
+    if (fs.existsSync(paths.modules + '@angular')) {
+        console.log('file exixt');
+        return true;
+    } else {
+        gulp.src('./node_modules/@angular/**/*.*').pipe(gulp.dest(paths.modules + '@angular'));
+        gulp.src('./node_modules/rxjs/**/*.*').pipe(gulp.dest(paths.modules + 'rxjs'));
+        gulp.src('./node_modules/angular2-in-memory-web-api/**/*.*').pipe(gulp.dest(paths.modules + 'angular2-in-memory-web-api'));
+    }
 });
 
 gulp.task('favicon', function () {
-    if( fs.existsSync(paths.lib)) {
-      console.log('file exixt');
-      return true;
-  } else {
+    if (fs.existsSync(paths.lib)) {
+        console.log('file exixt');
+        return true;
+    } else {
         return gulp.src(paths.script + 'favicon.ico').pipe(gulp.dest(paths.root));
-  }
+    }
+});
+
+gulp.task('htmlDelete', function () {
+    return gulp.src(paths.root + 'apps/**/*.html').pipe(del({
+        deleteMatch: true
+    }))
 });
 
 gulp.task('html', function () {
@@ -64,18 +70,24 @@ gulp.task('system', function () {
 //     }))
 // });
 
+gulp.task('cssDelete', function () {
+    return gulp.src(paths.root + 'apps/**/*.css').pipe(del({
+        deleteMatch: true
+    }))
+});
+
 gulp.task('css', function () {
     return gulp.src(paths.script + 'apps/**/*.css')
         .pipe(gulp.dest(paths.app));
 });
 
 gulp.task('libs', function () {
-    if( fs.existsSync(paths.lib)) {
-      console.log('file exixt');
-      return true;
-  } else {
+    if (fs.existsSync(paths.lib)) {
+        console.log('file exixt');
+        return true;
+    } else {
         return gulp.src(libs).pipe(gulp.dest(paths.lib));
-  }
+    }
 });
 
 gulp.task('tscopy', function () {
@@ -85,4 +97,4 @@ gulp.task('tscopy', function () {
 
 
 gulp.task('default', ['angularCore','favicon','html','index','system', 'css','libs','tscopy']);
-//gulp.task('default', ['favicon','html','index','system', 'css','tscopy']);
+//gulp.task('default', ['favicon', 'htmlDelete', 'html', 'index', 'system', 'cssDelete', 'css', 'tscopy']);
